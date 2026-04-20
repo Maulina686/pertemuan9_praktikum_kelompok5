@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
 
-class SignInScreen extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
-  SignInScreen({super.key});
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    phoneController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,7 +27,7 @@ class SignInScreen extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
                   SizedBox(height: constraints.maxHeight * 0.1),
@@ -21,6 +36,7 @@ class SignInScreen extends StatelessWidget {
                     height: 100,
                   ),
                   SizedBox(height: constraints.maxHeight * 0.1),
+
                   Text(
                     "Sign In",
                     style: Theme.of(context)
@@ -28,55 +44,67 @@ class SignInScreen extends StatelessWidget {
                         .headlineSmall!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
+
                   SizedBox(height: constraints.maxHeight * 0.05),
+
                   Form(
                     key: _formKey,
                     child: Column(
                       children: [
                         TextFormField(
+                          controller: phoneController,
+                          keyboardType: TextInputType.phone,
                           decoration: const InputDecoration(
                             hintText: 'Phone',
                             filled: true,
                             fillColor: Color(0xFFF5FCF9),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16.0 * 1.5, vertical: 16.0),
-                            border: const OutlineInputBorder(
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                            border: OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(50)),
                             ),
                           ),
-                          keyboardType: TextInputType.phone,
-                          onSaved: (phone) {
-                            // Save it
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Phone tidak boleh kosong';
+                            }
+                            return null;
                           },
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: TextFormField(
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                              hintText: 'Password',
-                              filled: true,
-                              fillColor: Color(0xFFF5FCF9),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0 * 1.5, vertical: 16.0),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
-                              ),
+
+                        const SizedBox(height: 16),
+
+                        TextFormField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            hintText: 'Password',
+                            filled: true,
+                            fillColor: Color(0xFFF5FCF9),
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50)),
                             ),
-                            onSaved: (passaword) {
-                              // Save it
-                            },
                           ),
+                          validator: (value) {
+                            if (value == null || value.length < 6) {
+                              return 'Password minimal 6 karakter';
+                            }
+                            return null;
+                          },
                         ),
+
+                        const SizedBox(height: 24),
+
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              // Navigate to the main screen
+                              Navigator.pushReplacementNamed(context, '/home');
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -88,7 +116,9 @@ class SignInScreen extends StatelessWidget {
                           ),
                           child: const Text("Sign in"),
                         ),
-                        const SizedBox(height: 16.0),
+
+                        const SizedBox(height: 16),
+
                         TextButton(
                           onPressed: () {},
                           child: Text(
@@ -105,6 +135,7 @@ class SignInScreen extends StatelessWidget {
                                 ),
                           ),
                         ),
+
                         TextButton(
                           onPressed: () {},
                           child: Text.rich(
