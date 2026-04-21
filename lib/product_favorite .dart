@@ -5,6 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 class FavoriteProductsScreen extends StatelessWidget {
   const FavoriteProductsScreen({super.key});
 
+  static get routeName => null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
