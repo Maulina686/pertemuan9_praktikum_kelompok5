@@ -40,19 +40,15 @@ class _SignInScreenState extends State<SignInScreen> {
                 children: [
                   SizedBox(height: constraints.maxHeight * 0.1),
 
-                  Image.network(
-                    "https://i.postimg.cc/nz0YBQcH/Logo-light.png",
-                    height: 100,
-                  ),
+                  Image.asset("assets/images/home.png", height: 100),
 
                   SizedBox(height: constraints.maxHeight * 0.1),
 
                   Text(
                     "Sign In",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
 
                   SizedBox(height: constraints.maxHeight * 0.05),
@@ -73,11 +69,14 @@ class _SignInScreenState extends State<SignInScreen> {
                             filled: true,
                             fillColor: Color(0xFFF5FCF9),
                             contentPadding: EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 16),
+                              horizontal: 24,
+                              vertical: 16,
+                            ),
                             border: OutlineInputBorder(
                               borderSide: BorderSide.none,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(50),
+                              ),
                             ),
                           ),
                           validator: (value) {
@@ -102,11 +101,14 @@ class _SignInScreenState extends State<SignInScreen> {
                             filled: true,
                             fillColor: const Color(0xFFF5FCF9),
                             contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 16),
+                              horizontal: 24,
+                              vertical: 16,
+                            ),
                             border: const OutlineInputBorder(
                               borderSide: BorderSide.none,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(50),
+                              ),
                             ),
                             suffixIcon: IconButton(
                               icon: Icon(
@@ -138,12 +140,15 @@ class _SignInScreenState extends State<SignInScreen> {
                               if (phone == "082345618062" &&
                                   password == "12345678") {
                                 Navigator.pushReplacementNamed(
-                                    context, '/home');
+                                  context,
+                                  '/home',
+                                );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(
-                                        "Nomor HP atau Password salah"),
+                                      "Nomor HP atau Password salah",
+                                    ),
                                     backgroundColor: Colors.red,
                                   ),
                                 );
@@ -166,9 +171,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           onPressed: () {},
                           child: Text(
                             'Forgot Password?',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
+                            style: Theme.of(context).textTheme.bodyMedium!
                                 .copyWith(
                                   color: Theme.of(context)
                                       .textTheme
@@ -191,9 +194,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 ),
                               ],
                             ),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
+                            style: Theme.of(context).textTheme.bodyMedium!
                                 .copyWith(
                                   color: Theme.of(context)
                                       .textTheme

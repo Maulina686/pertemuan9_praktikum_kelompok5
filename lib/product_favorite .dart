@@ -11,9 +11,7 @@ class FavoriteProductsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text("Favorite"),
-      ),
+      appBar: AppBar(title: const Text("Favorite")),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -25,10 +23,8 @@ class FavoriteProductsScreen extends StatelessWidget {
               mainAxisSpacing: 20,
               crossAxisSpacing: 16,
             ),
-            itemBuilder: (context, index) => ProductCard(
-              product: demoProducts[index],
-              onPress: () {},
-            ),
+            itemBuilder: (context, index) =>
+                ProductCard(product: demoProducts[index], onPress: () {}),
           ),
         ),
       ),
@@ -66,7 +62,7 @@ class ProductCard extends StatelessWidget {
                   color: const Color(0xFF979797).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Image.network(product.images[0]),
+                child: Image.asset('assets/images/${product.images[0]}'),
               ),
             ),
             const SizedBox(height: 8),
@@ -102,15 +98,16 @@ class ProductCard extends StatelessWidget {
                     child: SvgPicture.string(
                       heartIcon,
                       colorFilter: ColorFilter.mode(
-                          product.isFavourite
-                              ? const Color(0xFFFF4848)
-                              : const Color(0xFFDBDEE4),
-                          BlendMode.srcIn),
+                        product.isFavourite
+                            ? const Color(0xFFFF4848)
+                            : const Color(0xFFDBDEE4),
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -144,7 +141,7 @@ class Product {
 List<Product> demoProducts = [
   Product(
     id: 1,
-    images: ["https://i.postimg.cc/c19zpJ6f/Image-Popular-Product-1.png"],
+    images: ["gambar_1.jpg"],
     colors: [
       const Color(0xFFF6625E),
       const Color(0xFF836DB8),
@@ -160,9 +157,7 @@ List<Product> demoProducts = [
   ),
   Product(
     id: 2,
-    images: [
-      "https://i.postimg.cc/CxD6nH74/Image-Popular-Product-2.png",
-    ],
+    images: ["gambar_2.jpg"],
     colors: [
       const Color(0xFFF6625E),
       const Color(0xFF836DB8),
@@ -178,9 +173,7 @@ List<Product> demoProducts = [
   ),
   Product(
     id: 3,
-    images: [
-      "https://i.postimg.cc/1XjYwvbv/glap.png",
-    ],
+    images: ["gambar_3.jpg"],
     colors: [
       const Color(0xFFF6625E),
       const Color(0xFF836DB8),
@@ -196,9 +189,7 @@ List<Product> demoProducts = [
   ),
   Product(
     id: 4,
-    images: [
-      "https://i.postimg.cc/d1QWXMYW/Image-Popular-Product-3.png",
-    ],
+    images: ["gambar_4.jpg"],
     colors: [
       const Color(0xFFF6625E),
       const Color(0xFF836DB8),

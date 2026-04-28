@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 // TODO: add flutter_svg to pubspec.yaml
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pertemuan9_praktikum_kelompok5/product_favorite%20.dart';
-import 'favorite_products_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   static String routeName = "/home";
@@ -55,16 +54,9 @@ class HomeHeader extends StatelessWidget {
             },
           ),
 
-          IconBtnWithCounter(
-            svgSrc: cartIcon,
-            press: () {},
-          ),
+          IconBtnWithCounter(svgSrc: cartIcon, press: () {}),
           const SizedBox(width: 8),
-          IconBtnWithCounter(
-            svgSrc: bellIcon,
-            numOfitem: 3,
-            press: () {},
-          ),
+          IconBtnWithCounter(svgSrc: bellIcon, numOfitem: 3, press: () {}),
         ],
       ),
     );
@@ -83,8 +75,10 @@ class SearchField extends StatelessWidget {
           filled: true,
           hintStyle: const TextStyle(color: Color(0xFF757575)),
           fillColor: const Color(0xFF979797).withOpacity(0.1),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide.none,
@@ -159,7 +153,7 @@ class IconBtnWithCounter extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
         ],
       ),
     );
@@ -167,19 +161,14 @@ class IconBtnWithCounter extends StatelessWidget {
 }
 
 class DiscountBanner extends StatelessWidget {
-  const DiscountBanner({
-    Key? key,
-  }) : super(key: key);
+  const DiscountBanner({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.all(20),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 16,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
         color: const Color(0xFF4A3298),
         borderRadius: BorderRadius.circular(20),
@@ -191,10 +180,7 @@ class DiscountBanner extends StatelessWidget {
             TextSpan(text: "A Summer Surpise\n"),
             TextSpan(
               text: "Cashback 20%",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -204,11 +190,8 @@ class DiscountBanner extends StatelessWidget {
 }
 
 class SectionTitle extends StatelessWidget {
-  const SectionTitle({
-    Key? key,
-    required this.title,
-    required this.press,
-  }) : super(key: key);
+  const SectionTitle({Key? key, required this.title, required this.press})
+    : super(key: key);
 
   final String title;
   final GestureTapCallback press;
@@ -245,10 +228,7 @@ class PopularProducts extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SectionTitle(
-            title: "Popular Products",
-            press: () {},
-          ),
+          child: SectionTitle(title: "Popular Products", press: () {}),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -263,10 +243,7 @@ class PopularProducts extends StatelessWidget {
               childAspectRatio: 0.7,
             ),
             itemBuilder: (context, index) {
-              return ProductCard(
-                product: demoProducts[index],
-                onPress: () {},
-              );
+              return ProductCard(product: demoProducts[index], onPress: () {});
             },
           ),
         ),
@@ -284,10 +261,7 @@ class RecentlyAddedProducts extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SectionTitle(
-            title: "Recently Added",
-            press: () {},
-          ),
+          child: SectionTitle(title: "Recently Added", press: () {}),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -302,10 +276,7 @@ class RecentlyAddedProducts extends StatelessWidget {
               childAspectRatio: 0.7,
             ),
             itemBuilder: (context, index) {
-              return ProductCard(
-                product: demoProducts[index],
-                onPress: () {},
-              );
+              return ProductCard(product: demoProducts[index], onPress: () {});
             },
           ),
         ),
@@ -344,7 +315,7 @@ class ProductCard extends StatelessWidget {
                   color: const Color(0xFF979797).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Image.network(product.images[0]),
+                child: Image.asset('assets/images/${product.images[0]}'),
               ),
             ),
             const SizedBox(height: 8),
@@ -380,15 +351,16 @@ class ProductCard extends StatelessWidget {
                     child: SvgPicture.string(
                       heartIcon,
                       colorFilter: ColorFilter.mode(
-                          product.isFavourite
-                              ? const Color(0xFFFF4848)
-                              : const Color(0xFFDBDEE4),
-                          BlendMode.srcIn),
+                        product.isFavourite
+                            ? const Color(0xFFFF4848)
+                            : const Color(0xFFDBDEE4),
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -422,7 +394,7 @@ class Product {
 List<Product> demoProducts = [
   Product(
     id: 1,
-    images: ["https://i.postimg.cc/c19zpJ6f/Image-Popular-Product-1.png"],
+    images: ["gambar_1.jpg"],
     colors: [
       const Color(0xFFF6625E),
       const Color(0xFF836DB8),
@@ -438,9 +410,7 @@ List<Product> demoProducts = [
   ),
   Product(
     id: 2,
-    images: [
-      "https://i.postimg.cc/CxD6nH74/Image-Popular-Product-2.png",
-    ],
+    images: ["gambar_2.jpg"],
     colors: [
       const Color(0xFFF6625E),
       const Color(0xFF836DB8),
@@ -455,9 +425,7 @@ List<Product> demoProducts = [
   ),
   Product(
     id: 3,
-    images: [
-      "https://i.postimg.cc/1XjYwvbv/glap.png",
-    ],
+    images: ["gambar_3.jpg"],
     colors: [
       const Color(0xFFF6625E),
       const Color(0xFF836DB8),
@@ -473,16 +441,14 @@ List<Product> demoProducts = [
   ),
   Product(
     id: 4,
-    images: [
-      "https://i.postimg.cc/d1QWXMYW/Image-Popular-Product-3.png",
-    ],
+    images: ["gambar_4.jpg"],
     colors: [
       const Color(0xFFF6625E),
       const Color(0xFF836DB8),
       const Color(0xFFDECB9C),
       Colors.white,
     ],
-    title: "Gloves XC Omega - Polygon",
+    title: "Helmet XC Omega - Polygon",
     price: 36.55,
     description: description,
     rating: 4.1,
