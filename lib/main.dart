@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/cart_provider.dart';
+import 'welcome_screen.dart';      // ← Tambahkan ini
 import 'sign_in.dart';
 import 'home_page.dart';
 import 'product_favorite.dart';
@@ -23,8 +24,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Sign In',
         theme: ThemeData(primarySwatch: Colors.blue),
-        initialRoute: '/signin',
+        initialRoute: '/welcome',   // ← Ubah dari '/signin' menjadi '/welcome'
         routes: {
+          '/welcome': (context) => const WelcomeScreen(),   // ← Tambahkan
           '/signin': (context) => const SignInScreen(),
           '/home': (context) => const HomeScreen(),
           '/favorite': (context) => const FavoriteProductsScreen(),
