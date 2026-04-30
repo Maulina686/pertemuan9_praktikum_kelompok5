@@ -5,7 +5,9 @@ import 'package:pertemuan9_praktikum_kelompok5/models/product.dart';
 import 'package:pertemuan9_praktikum_kelompok5/product_favorite.dart' hide demoProducts, Product;
 import 'package:pertemuan9_praktikum_kelompok5/product_detail_page.dart';
 import 'package:pertemuan9_praktikum_kelompok5/providers/cart_provider.dart';
-import 'package:pertemuan9_praktikum_kelompok5/cart_page.dart'; // Pastikan file ini ada
+import 'package:pertemuan9_praktikum_kelompok5/providers/notification_provider.dart';
+import 'package:pertemuan9_praktikum_kelompok5/widgets/notification_bottomsheet.dart';
+import 'package:pertemuan9_praktikum_kelompok5/cart_page.dart';
 
 class HomeScreen extends StatelessWidget {
   static String routeName = "/home";
@@ -56,7 +58,7 @@ class HomeHeader extends StatelessWidget {
               );
             },
           ),
-          // 🔥 IKON KERANJANG DENGAN BADGE DAN NAVIGASI 🔥
+          // Keranjang
           Consumer<CartProvider>(
             builder: (context, cartProvider, child) {
               return Stack(
@@ -65,7 +67,6 @@ class HomeHeader extends StatelessWidget {
                   IconBtnWithCounter(
                     svgSrc: cartIcon,
                     press: () {
-                      // ✅ Navigasi ke halaman keranjang
                       Navigator.pushNamed(context, '/cart');
                     },
                   ),
@@ -99,7 +100,18 @@ class HomeHeader extends StatelessWidget {
             },
           ),
           const SizedBox(width: 8),
-          IconBtnWithCounter(svgSrc: bellIcon, numOfitem: 3, press: () {}),
+          // Notifikasi dengan badge dan bottom sheet
+          Consumer<NotificationProvider>(
+            builder: (context, notifProvider, child) {
+              return IconBtnWithCounter(
+                svgSrc: bellIcon,
+                numOfitem: notifProvider.unreadCount,
+                press: () {
+                  showNotificationSheet(context);
+                },
+              );
+            },
+          ),
         ],
       ),
     );

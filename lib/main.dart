@@ -6,6 +6,7 @@ import 'sign_in.dart';
 import 'home_page.dart';
 import 'product_favorite.dart';
 import 'cart_page.dart';
+import 'providers/notification_provider.dart';
 
 void main() {
   runApp(const MyApp());
