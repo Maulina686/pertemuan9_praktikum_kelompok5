@@ -114,9 +114,7 @@ Consumer<NotificationProvider>(
               );
             },
           ),
-          const SizedBox(width: 8),
-          // Ikon bel (sementara tanpa notifikasi)
-          IconBtnWithCounter(svgSrc: bellIcon, numOfitem: 0, press: () {}),
+          
         ],
       ),
     );
