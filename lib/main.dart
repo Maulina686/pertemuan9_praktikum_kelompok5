@@ -1,39 +1,64 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:pertemuan9_praktikum_kelompok5/providers/cart_provider.dart';
-// Impor untuk semua halaman Anda
-import 'package:pertemuan9_praktikum_kelompok5/sign_in.dart';
-import 'package:pertemuan9_praktikum_kelompok5/home_page.dart';
-import 'package:pertemuan9_praktikum_kelompok5/product_favorite.dart';
-import 'package:pertemuan9_praktikum_kelompok5/cart_page.dart';
-// JANGAN impor notification_provider.dart dulu
+import '../models/notification_model.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+class NotificationProvider extends ChangeNotifier {
+  List<AppNotification> _notifications = [];
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  List<AppNotification> get notifications => _notifications;
 
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        // Hanya CartProvider yang diperlukan untuk saat ini
-        ChangeNotifierProvider(create: (_) => CartProvider()),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Aplikasi Saya',
-        initialRoute: '/signin',
-        routes: {
-          '/signin': (context) => const SignInScreen(),
-          '/home': (context) => const HomeScreen(),
-          '/favorite': (context) => const FavoriteProductsScreen(),
-          '/cart': (context) => const CartPage(),
-          // Jangan sertakan rute untuk notifikasi
-        },
-      ),
+  int get unreadCount => _notifications.where((n) => !n.isRead).length;
+
+  // Tambah notifikasi baru
+  void addNotification(String title, String message) {
+    final newNotif = AppNotification(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      title: title,
+      message: message,
+      timestamp: DateTime.now(),
     );
+    _notifications.insert(0, newNotif);
+    notifyListeners();
+  }
+
+  // Tandai semua notifikasi sebagai sudah dibaca
+  void markAllAsRead() {
+    for (var notif in _notifications) {
+      notif.isRead = true;
+    }
+    notifyListeners();
+  }
+
+  // Hapus semua notifikasi
+  void clearAll() {
+    _notifications.clear();
+    notifyListeners();
+  }
+
+  // Data dummy untuk demo
+  void loadDummyNotifications() {
+    _notifications = [
+      AppNotification(
+        id: '1',
+        title: 'Selamat Datang!',
+        message: 'Terima kasih telah menggunakan aplikasi kami.',
+        timestamp: DateTime.now().subtract(const Duration(hours: 1)),
+        isRead: false,
+      ),
+      AppNotification(
+        id: '2',
+        title: 'Promo Spesial',
+        message: 'Dapatkan diskon 20% untuk semua produk hingga akhir bulan!',
+        timestamp: DateTime.now().subtract(const Duration(days: 1)),
+        isRead: false,
+      ),
+      AppNotification(
+        id: '3',
+        title: 'Info Aplikasi',
+        message: 'Nikmati fitur terbaru kami.',
+        timestamp: DateTime.now().subtract(const Duration(days: 2)),
+        isRead: true,
+      ),
+    ];
+    notifyListeners();
   }
 }

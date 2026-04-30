@@ -7,6 +7,8 @@ import 'package:pertemuan9_praktikum_kelompok5/product_favorite.dart'
 import 'package:pertemuan9_praktikum_kelompok5/product_detail_page.dart';
 import 'package:pertemuan9_praktikum_kelompok5/providers/cart_provider.dart';
 import 'package:pertemuan9_praktikum_kelompok5/cart_page.dart';
+import 'package:pertemuan9_praktikum_kelompok5/providers/notification_provider.dart';
+import 'package:pertemuan9_praktikum_kelompok5/widgets/notification_bottomsheet.dart';
 
 class HomeScreen extends StatelessWidget {
   static String routeName = "/home";
@@ -58,6 +60,20 @@ class HomeHeader extends StatelessWidget {
             },
           ),
           // Keranjang dengan badge
+          // ... setelah ikon keranjang ...
+const SizedBox(width: 8),
+// Notifikasi dengan badge dan bottom sheet (tidak bisa diklik)
+Consumer<NotificationProvider>(
+  builder: (context, notifProvider, child) {
+    return IconBtnWithCounter(
+      svgSrc: bellIcon,
+      numOfitem: notifProvider.unreadCount,
+      press: () {
+        showNotificationSheet(context);
+      },
+    );
+  },
+),
           Consumer<CartProvider>(
             builder: (context, cartProvider, child) {
               return Stack(

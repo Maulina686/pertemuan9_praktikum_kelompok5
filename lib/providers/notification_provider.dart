@@ -16,11 +16,11 @@ class NotificationProvider extends ChangeNotifier {
       message: message,
       timestamp: DateTime.now(),
     );
-    _notifications.insert(0, newNotif); // taruh di atas
+    _notifications.insert(0, newNotif);
     notifyListeners();
   }
 
-  // Tandai semua sebagai sudah dibaca (ketika bottom sheet dibuka)
+  // Tandai semua notifikasi sebagai sudah dibaca
   void markAllAsRead() {
     for (var notif in _notifications) {
       notif.isRead = true;
@@ -28,9 +28,9 @@ class NotificationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Hapus notifikasi
-  void removeNotification(String id) {
-    _notifications.removeWhere((n) => n.id == id);
+  // Hapus semua notifikasi
+  void clearAll() {
+    _notifications.clear();
     notifyListeners();
   }
 
@@ -39,22 +39,22 @@ class NotificationProvider extends ChangeNotifier {
     _notifications = [
       AppNotification(
         id: '1',
-        title: 'Welcome!',
-        message: 'Selamat datang di aplikasi kami.',
+        title: 'Selamat Datang!',
+        message: 'Terima kasih telah menggunakan aplikasi kami.',
         timestamp: DateTime.now().subtract(const Duration(hours: 1)),
         isRead: false,
       ),
       AppNotification(
         id: '2',
         title: 'Promo Spesial',
-        message: 'Dapatkan diskon 20% untuk semua produk!',
+        message: 'Dapatkan diskon 20% untuk semua produk hingga akhir bulan!',
         timestamp: DateTime.now().subtract(const Duration(days: 1)),
         isRead: false,
       ),
       AppNotification(
         id: '3',
-        title: 'Update Aplikasi',
-        message: 'Versi terbaru telah tersedia.',
+        title: 'Info Aplikasi',
+        message: 'Nikmati fitur terbaru kami.',
         timestamp: DateTime.now().subtract(const Duration(days: 2)),
         isRead: true,
       ),
