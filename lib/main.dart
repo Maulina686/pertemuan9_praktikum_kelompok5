@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'providers/cart_provider.dart';
-import 'welcome_screen.dart';      // ← Tambahkan ini
-import 'sign_in.dart';
-import 'home_page.dart';
-import 'product_favorite.dart';
-import 'cart_page.dart';
-import 'providers/notification_provider.dart';
+import 'package:pertemuan9_praktikum_kelompok5/providers/cart_provider.dart';
+// Impor untuk semua halaman Anda
+import 'package:pertemuan9_praktikum_kelompok5/sign_in.dart';
+import 'package:pertemuan9_praktikum_kelompok5/home_page.dart';
+import 'package:pertemuan9_praktikum_kelompok5/product_favorite.dart';
+import 'package:pertemuan9_praktikum_kelompok5/cart_page.dart';
+// JANGAN impor notification_provider.dart dulu
 
 void main() {
   runApp(const MyApp());
@@ -19,19 +19,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        // Hanya CartProvider yang diperlukan untuk saat ini
         ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Sign In',
-        theme: ThemeData(primarySwatch: Colors.blue),
-        initialRoute: '/welcome',   // ← Ubah dari '/signin' menjadi '/welcome'
+        title: 'Aplikasi Saya',
+        initialRoute: '/signin',
         routes: {
-          '/welcome': (context) => const WelcomeScreen(),   // ← Tambahkan
           '/signin': (context) => const SignInScreen(),
           '/home': (context) => const HomeScreen(),
           '/favorite': (context) => const FavoriteProductsScreen(),
           '/cart': (context) => const CartPage(),
+          // Jangan sertakan rute untuk notifikasi
         },
       ),
     );
