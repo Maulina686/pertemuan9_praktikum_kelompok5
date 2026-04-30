@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pertemuan9_praktikum_kelompok5/models/notification_model.dart' show AppNotification;
 import 'package:provider/provider.dart';
 import '../providers/notification_provider.dart';
 
