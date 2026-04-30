@@ -3,14 +3,22 @@ import 'package:flutter/material.dart';
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
+  static String? get routeName => null;
+
   @override
   State<SignInScreen> createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
+
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  bool _obscurePassword = true;
+
+  String phone = '';
+  String password = '';
 
   @override
   void dispose() {
@@ -31,18 +39,16 @@ class _SignInScreenState extends State<SignInScreen> {
               child: Column(
                 children: [
                   SizedBox(height: constraints.maxHeight * 0.1),
-                  Image.network(
-                    "https://i.postimg.cc/nz0YBQcH/Logo-light.png",
-                    height: 100,
-                  ),
+
+                  Image.asset("assets/images/home.png", height: 100),
+
                   SizedBox(height: constraints.maxHeight * 0.1),
 
                   Text(
                     "Sign In",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
 
                   SizedBox(height: constraints.maxHeight * 0.05),
@@ -51,24 +57,31 @@ class _SignInScreenState extends State<SignInScreen> {
                     key: _formKey,
                     child: Column(
                       children: [
+                        // 📱 PHONE
                         TextFormField(
                           controller: phoneController,
                           keyboardType: TextInputType.phone,
+                          onChanged: (value) {
+                            phone = value;
+                          },
                           decoration: const InputDecoration(
                             hintText: 'Phone',
                             filled: true,
                             fillColor: Color(0xFFF5FCF9),
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 16,
+                            ),
                             border: OutlineInputBorder(
                               borderSide: BorderSide.none,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(50),
+                              ),
                             ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Phone tidak boleh kosong';
+                              return 'Nomor HP tidak boleh kosong';
                             }
                             return null;
                           },
@@ -76,19 +89,38 @@ class _SignInScreenState extends State<SignInScreen> {
 
                         const SizedBox(height: 16),
 
+                        // 🔐 PASSWORD
                         TextFormField(
                           controller: passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
+                          obscureText: _obscurePassword,
+                          onChanged: (value) {
+                            password = value;
+                          },
+                          decoration: InputDecoration(
                             hintText: 'Password',
                             filled: true,
-                            fillColor: Color(0xFFF5FCF9),
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                            border: OutlineInputBorder(
+                            fillColor: const Color(0xFFF5FCF9),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 16,
+                            ),
+                            border: const OutlineInputBorder(
                               borderSide: BorderSide.none,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(50),
+                              ),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
+                              },
                             ),
                           ),
                           validator: (value) {
@@ -101,10 +133,26 @@ class _SignInScreenState extends State<SignInScreen> {
 
                         const SizedBox(height: 24),
 
+                        // 🔘 LOGIN BUTTON
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              Navigator.pushReplacementNamed(context, '/home');
+                              if (phone == "082345618062" &&
+                                  password == "12345678") {
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  '/home',
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      "Nomor HP atau Password salah",
+                                    ),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -123,9 +171,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           onPressed: () {},
                           child: Text(
                             'Forgot Password?',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
+                            style: Theme.of(context).textTheme.bodyMedium!
                                 .copyWith(
                                   color: Theme.of(context)
                                       .textTheme
@@ -148,9 +194,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 ),
                               ],
                             ),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
+                            style: Theme.of(context).textTheme.bodyMedium!
                                 .copyWith(
                                   color: Theme.of(context)
                                       .textTheme
