@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'providers/auth_provider.dart';
+import 'providers/cart_provider.dart';
+import 'providers/product_provider.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
-
-  static String? get routeName => null;
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -11,20 +13,31 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
-
-  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
   bool _obscurePassword = true;
 
-  String phone = '';
-  String password = '';
+  Future<void> _login() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    final productProvider = Provider.of<ProductProvider>(context, listen: false);
 
-  @override
-  void dispose() {
-    phoneController.dispose();
-    passwordController.dispose();
-    super.dispose();
+    final success = await authProvider.login(
+      usernameController.text.trim(),
+      passwordController.text.trim(),
+    );
+    if (success) {
+      final token = authProvider.token!;
+      await Future.wait([
+        cartProvider.syncCartFromApi(token),
+        productProvider.fetchProducts(token),
+      ]);
+      if (mounted) Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login gagal'), backgroundColor: Colors.red),
+      );
+    }
   }
 
   @override
@@ -39,170 +52,55 @@ class _SignInScreenState extends State<SignInScreen> {
               child: Column(
                 children: [
                   SizedBox(height: constraints.maxHeight * 0.1),
-
                   Image.asset("assets/images/home.png", height: 100),
-
                   SizedBox(height: constraints.maxHeight * 0.1),
-
-                  Text(
-                    "Sign In",
-                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
+                  Text("Sign In", style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold)),
                   SizedBox(height: constraints.maxHeight * 0.05),
-
                   Form(
                     key: _formKey,
                     child: Column(
                       children: [
-                        // 📱 PHONE
                         TextFormField(
-                          controller: phoneController,
-                          keyboardType: TextInputType.phone,
-                          onChanged: (value) {
-                            phone = value;
-                          },
+                          controller: usernameController,
                           decoration: const InputDecoration(
-                            hintText: 'Phone',
+                            hintText: 'Username',
                             filled: true,
                             fillColor: Color(0xFFF5FCF9),
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 16,
-                            ),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(50),
-                              ),
-                            ),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                            border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(50))),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Nomor HP tidak boleh kosong';
-                            }
-                            return null;
-                          },
+                          validator: (v) => v == null || v.isEmpty ? 'Username tidak boleh kosong' : null,
                         ),
-
                         const SizedBox(height: 16),
-
-                        // 🔐 PASSWORD
                         TextFormField(
                           controller: passwordController,
                           obscureText: _obscurePassword,
-                          onChanged: (value) {
-                            password = value;
-                          },
                           decoration: InputDecoration(
                             hintText: 'Password',
                             filled: true,
                             fillColor: const Color(0xFFF5FCF9),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 16,
-                            ),
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(50),
-                              ),
-                            ),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                            border: const OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(50))),
                             suffixIcon: IconButton(
-                              icon: Icon(
-                                _obscurePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscurePassword = !_obscurePassword;
-                                });
-                              },
+                              icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
+                              onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                             ),
                           ),
-                          validator: (value) {
-                            if (value == null || value.length < 6) {
-                              return 'Password minimal 6 karakter';
-                            }
-                            return null;
-                          },
+                          validator: (v) => v == null || v.length < 6 ? 'Password minimal 6 karakter' : null,
                         ),
-
                         const SizedBox(height: 24),
-
-                        // 🔘 LOGIN BUTTON
-                        ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              if (phone == "082345618062" &&
-                                  password == "12345678") {
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  '/home',
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      "Nomor HP atau Password salah",
-                                    ),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                              }
-                            }
+                        Consumer<AuthProvider>(
+                          builder: (context, auth, _) {
+                            return ElevatedButton(
+                              onPressed: auth.isLoading ? null : _login,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF00BF6D),
+                                minimumSize: const Size(double.infinity, 48),
+                                shape: const StadiumBorder(),
+                              ),
+                              child: auth.isLoading ? const CircularProgressIndicator(color: Colors.white) : const Text("Sign in"),
+                            );
                           },
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: const Color(0xFF00BF6D),
-                            foregroundColor: Colors.white,
-                            minimumSize: const Size(double.infinity, 48),
-                            shape: const StadiumBorder(),
-                          ),
-                          child: const Text("Sign in"),
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Forgot Password?',
-                            style: Theme.of(context).textTheme.bodyMedium!
-                                .copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color!
-                                      .withOpacity(0.64),
-                                ),
-                          ),
-                        ),
-
-                        TextButton(
-                          onPressed: () {},
-                          child: Text.rich(
-                            const TextSpan(
-                              text: "Don’t have an account? ",
-                              children: [
-                                TextSpan(
-                                  text: "Sign Up",
-                                  style: TextStyle(color: Color(0xFF00BF6D)),
-                                ),
-                              ],
-                            ),
-                            style: Theme.of(context).textTheme.bodyMedium!
-                                .copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color!
-                                      .withOpacity(0.64),
-                                ),
-                          ),
                         ),
                       ],
                     ),

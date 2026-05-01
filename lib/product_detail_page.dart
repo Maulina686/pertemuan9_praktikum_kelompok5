@@ -174,7 +174,7 @@ class _ProductImagesState extends State<ProductImages> {
           width: 238,
           child: AspectRatio(
             aspectRatio: 1,
-            child: Image.asset('assets/images/${widget.product.images[selectedImage]}'),
+            child: Image.network(widget.product.images[selectedImage]),
           ),
         ),
         Row(
@@ -231,7 +231,7 @@ class _SmallProductImageState extends State<SmallProductImage> {
             color: const Color(0xFFFF7643).withOpacity(widget.isSelected ? 1 : 0),
           ),
         ),
-        child: Image.asset('assets/images/${widget.image}'),
+        child: Image.network(widget.image),
       ),
     );
   }

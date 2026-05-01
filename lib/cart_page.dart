@@ -115,6 +115,9 @@ class CartItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
     final product = cartItem.product;
+    
+    // Ambil URL gambar (asumsi product.images[0] berisi URL dari API)
+    final imageUrl = product.images.isNotEmpty ? product.images[0] : '';
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -132,13 +135,21 @@ class CartItemCard extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  'assets/images/${product.images[0]}',
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.image_not_supported, size: 40);
-                  },
-                ),
+                child: imageUrl.isEmpty
+                    ? const Icon(Icons.image_not_supported, size: 40)
+                    : Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.broken_image, size: 40);
+                        },
+                      ),
               ),
             ),
             const SizedBox(width: 12),

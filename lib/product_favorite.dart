@@ -1,52 +1,68 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:pertemuan9_praktikum_kelompok5/models/product.dart';
 import 'package:pertemuan9_praktikum_kelompok5/product_detail_page.dart';
+import 'package:pertemuan9_praktikum_kelompok5/providers/product_provider.dart';
 
 class FavoriteProductsScreen extends StatelessWidget {
   const FavoriteProductsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Filter produk favorit (isFavourite = true)
-    final favoriteProducts = demoProducts.where((p) => p.isFavourite).toList();
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(title: const Text("Favorite")),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: favoriteProducts.isEmpty
-              ? const Center(
-                  child: Text(
-                    "No favorite products yet.",
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                )
-              : GridView.builder(
-                  itemCount: favoriteProducts.length,
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                    childAspectRatio: 0.7,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 16,
-                  ),
-                  itemBuilder: (context, index) {
-                    final product = favoriteProducts[index];
-                    return ProductCard(
-                      product: product,
-                      onPress: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductDetailsScreen(product: product),
-                          ),
-                        );
-                      },
-                    );
-                  },
+        child: Consumer<ProductProvider>(
+          builder: (context, productProvider, child) {
+            if (productProvider.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (productProvider.error != null) {
+              return Center(child: Text('Error: ${productProvider.error}'));
+            }
+            // Filter produk favorit dari data API
+            final favoriteProducts =
+                productProvider.products.where((p) => p.isFavourite).toList();
+
+            if (favoriteProducts.isEmpty) {
+              return const Center(
+                child: Text(
+                  "No favorite products yet.",
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
+              );
+            }
+
+            return Padding(
+              padding: const EdgeInsets.all(16),
+              child: GridView.builder(
+                itemCount: favoriteProducts.length,
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 200,
+                  childAspectRatio: 0.7,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 16,
+                ),
+                itemBuilder: (context, index) {
+                  final product = favoriteProducts[index];
+                  return ProductCard(
+                    product: product,
+                    onPress: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ProductDetailsScreen(product: product),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            );
+          },
         ),
       ),
     );
